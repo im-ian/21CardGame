@@ -11,3 +11,8 @@ python 21CardGame.py
   File "21CardGame.py", line 5
 SyntaxError: Non-ASCII character '\xea' in file 21CardGame.py on line 5, but no encoding declared; see http://python.org/dev/peps/pep-0263/ for details
 ```
+
+## 게임 화면
+![image](https://github.com/im-ian/21CardGame/assets/38205068/8a3e5852-d549-48ab-b884-a291cb7fe33e)
+
+![image](https://github.com/im-ian/21CardGame/assets/38205068/59e97614-13e6-42e9-b4fd-40f585037866)
