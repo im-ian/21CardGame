@@ -35,16 +35,18 @@ def main():
 
     while True:
         try:
-            clearConsole()
+            clear()
             # 게임 메뉴입니다.
-            print("\n[블랙잭]\n")
+            print("\n%s 블랙잭 %s\n" % ("🃏", "🃏"))
             print("서로 번갈아면서 무작위의 카드를 받아 숫자의 합이 최대한 21과 가깝게 만드는 게임입니다.\n")
             print("1. 카드의 합이 21을 초과하면 패배합니다.")
             print("2. 양쪽의 플레이어가 21을 초과하면 21에 가장 근접한 플레이어가 승리합니다.")
             print("3. 같은 숫자의 카드는 한 장씩만 존재합니다.")
             print("4. 양쪽의 플레이어가 모두 카드를 받지 않으면 결과를 확인합니다.")
             print("5. 서로의 두 번째 카드는 까지는 공개됩니다.\n ")
-            gameMenu = int(input("[1] 게임 시작 [2] 종료 \n>> "))
+            
+            print("원하시는 동작을 키보드 숫자키를 통해 입력해주세요.")
+            gameMenu = int(input("[1] 게임 시작  [2] 종료 \n>> "))
             if gameMenu == 1:
                 break
             elif gameMenu == 2:
@@ -52,13 +54,13 @@ def main():
                 break
         except:
             # input 값을 int 변환에 실패하면 except로 오류를 처리합니다.
-            print("\n[오류] 정상적이지 못한 값을 입력받았습니다.")
+            print("\n😰 정상적이지 못한 값을 입력받았습니다.")
             time.sleep(1)
 
     if isExit:
         return
 
-    clearConsole()
+    clear()
 
     # 기본적으로 2장의 카드를 가지고 시작합니다.
     for i in range(0, 2):
@@ -66,9 +68,6 @@ def main():
         drawComputer()
 
     while True:
-        print("행동을 선택하세요.")
-        print("양쪽의 플레이어가 카드를 받지 않으면 결과를 확인합니다.\n")
-
         print("상대\t", end="")
         cardCount = 0
         for i in computer["hand"]:
@@ -85,22 +84,25 @@ def main():
             print("%s %-4s" % (i["icon"], i["value"]), end="")
 
         try:
-            action = int(input("\n\n[1] 카드 받기 [2] 그만 받기 \n>> "))
+            print("\n\n행동을 선택하세요.")
+            print("양쪽의 플레이어가 카드를 받지 않으면 결과를 확인합니다.")
+            
+            action = int(input("[1] 카드 받기 [2] 그만 받기 \n>> "))
             print("")
 
             if action == 1:
                 # 플레이어 카드 뽑기
                 drawPlayer()
-                print("[안내] 카드를 받았습니다.")
+                print("👌 카드를 받았습니다.")
 
                 time.sleep(1)
 
                 # 컴퓨터 카드 뽑기 처리
-                if potodds():
+                if checkDraw():
                     drawComputer()
-                    print("[안내] 상대방이 카드를 받습니다.\n")
+                    print("👌 상대방이 카드를 받습니다.\n")
                 else:
-                    print("[안내] 상대방은 카드를 받지 않았습니다.\n")
+                    print("🤚 상대방은 카드를 받지 않았습니다.\n")
 
                 time.sleep(1)
 
@@ -108,12 +110,12 @@ def main():
                 continue
             elif action == 2:
                 # 컴퓨터도 그만 받는지 확인
-                if potodds():
-                    print("[안내] 카드를 받지 않았습니다.")
+                if checkDraw():
+                    print("🤚 카드를 받지 않았습니다.")
                     time.sleep(1)
 
                     drawComputer()
-                    print("[안내] 상대방이 카드를 받습니다.\n")
+                    print("👌 상대방이 카드를 받습니다.\n")
                     time.sleep(1)
                     print("%s" % "=" * 20, end="\n\n")
                     continue
@@ -123,7 +125,8 @@ def main():
             continue
 
     print("%s" % "=" * 20, end="\n\n")
-    print("[안내] 게임 승부 결과입니다.\n")
+    print("🥁 게임 승부 결과입니다.\n")
+    time.sleep(1)
     print("상대\t", end="")
     for i in computer["hand"]:
         print("%s %-4s" % (i["icon"], i["value"]), end="")
@@ -136,39 +139,40 @@ def main():
 
     print("= %d" % player["score"], end="\n\n")
 
-    # 두 플레이어 모두 21을 초과한 경우
+    # 결과 확인 알고리즘
     if player["score"] == computer["score"]:
         # 플레이어와 컴퓨터의 점수가 같을 경우
-        print("무승부입니다.")
+        print("🤝 무승부입니다.")
+    # 두 플레이어 모두 21을 초과한 경우
     elif player["score"] > 21 and computer["score"] > 21:
         # 플레이어와 컴퓨터 모두 21을 초과한 경우 가장 근접한 사람이 승리
         if player["score"] < computer["score"]:
-            print("플레이어가 승리했습니다!")
+            print("🎉 플레이어가 승리했습니다!")
         else:
-            print("상대방이 승리했습니다!")
+            print("😓 상대방이 승리했습니다!")
     elif player["score"] == 21 and computer["score"] != 21:
         # 플레이어가 21을 만들었을 경우
-        print("플레이어가 승리했습니다!")
+        print("🎉 플레이어가 승리했습니다!")
     elif player["score"] != 21 and computer["score"] == 21:
         # 컴퓨터가 21을 만들었을 경우
-        print("상대방이 승리했습니다!")
+        print("😓 상대방이 승리했습니다!")
     elif player["score"] < 21 and computer["score"] > 21:
         # 컴퓨터만 21을 초과한 경우
-        print("플레이어가 승리했습니다!")
+        print("🎉 플레이어가 승리했습니다!")
     elif player["score"] > 21 and computer["score"] < 21:
         # 플레이어만 21을 초과한 경우
-        print("상대방이 승리했습니다!")
+        print("😓 상대방이 승리했습니다!")
     elif player["score"] > computer["score"]:
         # 컴퓨터보다 플레이어 점수가 높을 때
-        print("플레이어가 승리했습니다!")
+        print("🎉 플레이어가 승리했습니다!")
     elif player["score"] < computer["score"]:
         # 플레이어보다 컴퓨터 점수가 높을 때
-        print("상대방이 승리했습니다!")
+        print("😓 상대방이 승리했습니다!")
     else:
-        print("승리 조건 미지정")
+        print("😶 알 수 없는 승리 조건입니다.")
 
 
-def clearConsole():
+def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
 
@@ -192,7 +196,7 @@ def drawComputer():
 
 
 # 컴퓨터가 카드를 받을지의 여부를 결정하는 알고리즘입니다.
-def potodds():
+def checkDraw():
     if (computer["score"] >= 21):
         # 21점이거나 21점이 넘어가면 그만 받음.
         return False
